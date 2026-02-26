@@ -21,7 +21,7 @@ O sistema utiliza duas tabelas principais:
 ## Evolução Contínua (Roadmap)
 Este projeto está em desenvolvimento constante. Minha meta é aplicar melhorias incrementais conforme avanço nos estudos:
 - [x] Criar estrutura básica do banco de dados.
-- [ ] Implementar CRUD de usuários e tarefas.
+- [X] Implementar CRUD de usuários e tarefas.
 - [ ] Adicionar tratamento de erros e gerenciamento de contexto (Context Managers).
 - [ ] Aplicar Clean Code e padrões de projeto (Repository Pattern).
 
