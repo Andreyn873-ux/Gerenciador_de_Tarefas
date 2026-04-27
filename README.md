@@ -23,7 +23,8 @@ Este projeto está em desenvolvimento constante. Minha meta é aplicar melhorias
 - [x] Criar estrutura básica do banco de dados.
 - [X] Implementar CRUD de usuários e tarefas.
 - [X] Adicionar tratamento de erros e gerenciamento de contexto (Context Managers).
-- [ ] Aplicar Clean Code e padrões de projeto (Repository Pattern).
+- [X] Aplicar Clean Code e padrões de projeto (Repository Pattern).
+- [X] Exposição de API REST com Flask (GET e POST)
 
 ## Como rodar o projeto
 1. Certifique-se de ter o Python instalado.
