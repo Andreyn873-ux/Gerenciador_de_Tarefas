@@ -7,8 +7,11 @@ def iniciar_sistema(service):
         print("4 - Deletar tarefa")
         print("0 - Sair")
 
+        opcao = None
+
         try:
             opcao = int(input("Escolha uma opcao: "))
+
         except ValueError:
             print("Digite um numero valido.")
             continue
