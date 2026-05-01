@@ -1,68 +1,53 @@
-def iniciar_sistema(service):
-    while True:
-        print("\n === GERENCIADOR DE TAREFAS ===")
-        print("1 - Criar tarefa")
-        print("2 - Listar tarefas")
-        print("3 - Atualizar tarefa")
-        print("4 - Deletar tarefa")
-        print("0 - Sair")
+import click
 
-        opcao = None
+from services.tarefas_service import TarefasService
+from repositories.tarefas_repository import TarefasRepository
 
-        try:
-            opcao = int(input("Escolha uma opcao: "))
+repository = TarefasRepository()
+service = TarefasService(repository)
 
-        except ValueError:
-            print("Digite um numero valido.")
-            continue
+@click.group()
+def cli():
+    """Gerenciador de Tarefas CLI"""
+    pass
 
-        if opcao == 1:
-            titulo = input("Digite o titulo da tarefa: ")
+@cli.command()
+@click.argument('titulo')
+def criar(titulo):
+    try:
+        tarefa = service.criar_tarefa(titulo)
+        click.echo(f"Tarefa criada: {tarefa.id} - {tarefa.titulo}")
+    except ValueError as e:
+        click.echo(f"Erro: {e}")
+    
+@cli.command()
+def listar():
+    tarefa = service.listar_tarefas()
+    if not tarefa:
+        click.echo("Nenhuma tarefa encontrada.")
+    else:
+        for t in tarefa:
+            click.echo(f"[{t.id}] - {t.titulo} - {t.status}")
 
-            try:
-                service.criar_tarefa(titulo)
-                print("Tarefa criada com sucesso!")
-            except ValueError as e:
-                print(f"Erro: {e}")
+@cli.command()
+@click.argument("tarefa_id", type=int)
+@click.argument("status")
 
-        elif opcao == 2:
-            tarefas = service.listar_tarefas()
+def atualizar_status(tarefa_id, status):
+    try:
+        service.atualizar_status(tarefa_id, status)
+        click.echo(f"Tarefa atualizada com sucesso!")
+    except ValueError as e:
+        click.echo(f"Erro: {e}")
 
-            if not tarefas:
-                print("Nenhuma tarefa encontrada.")
-            else:
-                for tarefa in tarefas:
-                    print(f"ID: {tarefa.id} | {tarefa.titulo} | {tarefa.status}")
+@cli.command()
+@click.argument("tarefa_id", type=int)
+def deletar(tarefa_id):
+    try:
+        service.deletar_tarefa(tarefa_id)
+        click.echo(f"Tarefa deletada com sucesso!")
+    except ValueError as e:
+        click.echo(f"Erro: {e}")
 
-        elif opcao == 3:
-            try:
-                tarefa_id = int(input("Digite o ID da tarefa: "))
-                novo_status = input("Novo status (pendente/concluida): ").strip().lower()
-
-                if novo_status in ["concluida", "concluída"]:
-                    novo_status = "concluida"
-
-                status_validos = ["pendente", "concluida"]
-                if novo_status not in status_validos:
-                    print("Status invalido!")
-                    continue
-
-                service.atualizar_status(tarefa_id, novo_status)
-                print("Status atualizado com sucesso!")
-
-            except ValueError:
-                print("ID invalido.")
-
-        elif opcao == 4:
-            try:
-                tarefa_id = int(input("Digite o ID da tarefa: "))
-                service.deletar_tarefa(tarefa_id)
-                print("Tarefa deletada com sucesso!")
-            except ValueError:
-                print("ID invalido.")
-
-        elif opcao == 0:
-            print("Saindo do sistema...")
-            break
-        else:
-            print("Opcao invalida.")
+if __name__ == "__main__":
+    cli()
