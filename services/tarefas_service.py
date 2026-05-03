@@ -10,18 +10,21 @@ class TarefasService:
             raise ValueError("O título da tarefa é obrigatório.")
         
         tarefa = Tarefa(
-            titulo = titulo,
-            status = "pendente",
-            usuario_id = usuario_id
+            titulo=titulo,
+            status="pendente",
+            usuario_id=usuario_id
         )
 
-        self.repository.salvar(tarefa)
+        tarefa_id = self.repository.salvar(tarefa)
+        tarefa.id = tarefa_id
+
         return tarefa
+    
     
     def listar_tarefas(self):
         return self.repository.listar()
 
-    def bsucar_tarefa(self, tarefa_id):
+    def buscar_tarefa(self, tarefa_id):
         tarefa = self.repository.buscar_por_id(tarefa_id)
 
         if not tarefa:
@@ -35,7 +38,7 @@ class TarefasService:
         if novo_status not in status_validos:
             raise ValueError("Status invalido")
 
-        self.repository.atualizar_status(tarefa_id, novo_status)
+        atualizado = self.repository.atualizar_status(tarefa_id, novo_status)
 
         if not atualizado:
             raise ValueError("Tarefa não encontrada")
@@ -43,7 +46,7 @@ class TarefasService:
         return True
 
     def deletar_tarefa(self, tarefa_id):
-        self.repository.deletar(tarefa_id)
+        deletado = self.repository.deletar(tarefa_id)
 
         if not deletado:
             raise ValueError("Tarefa não encontrada")

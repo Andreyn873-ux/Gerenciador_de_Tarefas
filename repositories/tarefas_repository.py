@@ -12,10 +12,14 @@ class TarefasRepository:
             INSERT INTO tarefas (titulo, status, usuario_id)
             VALUES (?, ?, ?)
         """, (tarefa.titulo, tarefa.status, tarefa.usuario_id))
+        
+        tarefa_id = cursor.lastrowid
 
         conn.commit()
         conn.close()
 
+        return tarefa_id
+    
     def listar(self):
         conn = conectar()
         cursor = conn.cursor()
